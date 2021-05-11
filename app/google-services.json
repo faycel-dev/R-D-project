@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "639036868488",
+    "project_id": "rdapp-62f31",
+    "storage_bucket": "rdapp-62f31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639036868488:android:585325890a5631a0721c3d",
+        "android_client_info": {
+          "package_name": "com.example.rdapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639036868488-kro388eg0cgmmum8et63h7ss06tf930p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzUHTSalSY9zLG3RJZHCVNhHauhYjzTWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639036868488-kro388eg0cgmmum8et63h7ss06tf930p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

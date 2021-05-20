@@ -31,12 +31,12 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
 
-        mFellname = findViewById(R.id.Fname);
-        mEmail = findViewById(R.id.Email);
-        mPassword = findViewById(R.id.password);
-        mPhone =findViewById(R.id.phone);
-        mRegisterbtn =findViewById(R.id.registerbtn);
-        mloginbtn=findViewById(R.id.textView3);
+        mFellname = findViewById(R.id.etName);
+        mEmail = findViewById(R.id.etEmail);
+        mPassword = findViewById(R.id.etPassword);
+        mPhone =findViewById(R.id.etPhone);
+        mRegisterbtn =findViewById(R.id.btnRegister);
+        mloginbtn=findViewById(R.id.tvAlreadyRegistered);
 
         fAuth=FirebaseAuth.getInstance();
         progressBar=findViewById(R.id.progressBar);
@@ -55,7 +55,7 @@ public class Register extends AppCompatActivity {
                 String password = mPassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
-                    mEmail.setError("email is required");
+                    mEmail.setError("Email is required");
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
@@ -63,13 +63,13 @@ public class Register extends AppCompatActivity {
                     return;
                 }
                 if (password.length() < 6) {
-                    mPassword.setError("too short password!!");
+                    mPassword.setError("Password too short!");
                 }
                 progressBar.setVisibility(View.VISIBLE);
 
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull  Task<AuthResult> task) {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(Register.this, "user created", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));

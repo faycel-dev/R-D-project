@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
         mPassword = findViewById(R.id.password);
         mloginbtn =findViewById(R.id.loginbtn);
         mcreateB =findViewById(R.id.textView4);
-        progressBar=findViewById(R.id.progressBar2);
+        progressBar=findViewById(R.id.progressBar);
         fAuth=FirebaseAuth.getInstance();
 
 
@@ -44,7 +44,7 @@ public class Login extends AppCompatActivity {
         String password = mPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            mEmail.setError("email is required");
+            mEmail.setError("Email is required");
             return;
         }
         if (TextUtils.isEmpty(password)) {
@@ -52,7 +52,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         if (password.length() < 6) {
-            mPassword.setError("too short password!!");
+            mPassword.setError("Password too short!");
         }
         progressBar.setVisibility(View.VISIBLE);
 
@@ -60,7 +60,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull  Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(Login.this, "Loged in successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }else{
                     Toast.makeText(Login.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

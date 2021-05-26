@@ -52,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent.hasExtra(AddGoalActivity.GOAL_TITLE) && intent.hasExtra((AddGoalActivity.GOAL_DESCRIPTION)) && intent.hasExtra(AddGoalActivity.GOAL_DEADLINE)) {
-            goals.add(new Goal(intent.getStringExtra(AddGoalActivity.GOAL_TITLE), intent.getStringExtra(AddGoalActivity.GOAL_DESCRIPTION), intent.getStringExtra(AddGoalActivity.GOAL_DEADLINE)));
+            goals.addLast(new Goal(intent.getStringExtra(AddGoalActivity.GOAL_TITLE), intent.getStringExtra(AddGoalActivity.GOAL_DESCRIPTION), intent.getStringExtra(AddGoalActivity.GOAL_DEADLINE)));
             goalsAdapter.notifyDataSetChanged();
+            db = FirebaseFirestore.getInstance();
+            addDataFireStore();
         }
 
         saveGoals();
@@ -86,10 +88,6 @@ public class MainActivity extends AppCompatActivity {
     public void logout(View view) {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),Login.class));
-
-        db = FirebaseFirestore.getInstance();
-
-        addDataFireStore();
         finish();
     }
 
@@ -99,20 +97,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addDataFireStore(){
-        CollectionReference dbCollection = db.collection("Users");
+        CollectionReference dbCollection = db.collection("users");
         HashMap<String, Object> Goals = new HashMap<>();
-        Goals.put("Goal", goals);
-
-        dbCollection.add(Goals).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(MainActivity.this, "Your goals have been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Fail to add goals \n" + e, Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(goals.size() >0) {
+            Goals.put(String.valueOf(goals.size()-1), goals.getLast());
+            dbCollection.add(Goals).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    Toast.makeText(MainActivity.this, "Your goals have been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, "Fail to add goals \n" + e, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }

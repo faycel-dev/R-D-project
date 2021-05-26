@@ -14,6 +14,7 @@ import android.view.View;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.SetOptions;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
@@ -97,11 +98,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addDataFireStore(){
-        CollectionReference dbCollection = db.collection("users");
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        String userId = fAuth.getCurrentUser().getUid();
+        DocumentReference dbDocument = db.document("users/" + userId);
         HashMap<String, Object> Goals = new HashMap<>();
         if(goals.size() >0) {
             Goals.put(String.valueOf(goals.size()-1), goals.getLast());
-            dbCollection.add(Goals).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            System.out.println(dbDocument.getId());
+            dbDocument.set(Goals, SetOptions.merge())/*.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     Toast.makeText(MainActivity.this, "Your goals have been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(MainActivity.this, "Fail to add goals \n" + e, Toast.LENGTH_SHORT).show();
                 }
-            });
+            })*/;
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,17 +48,34 @@ public class MainActivity extends AppCompatActivity {
 
         goalList = findViewById(R.id.rvGoals);
 
+        Intent intent = getIntent();
+        if (intent.hasExtra(AddGoalActivity.GOAL_TITLE) && intent.hasExtra((AddGoalActivity.GOAL_DESCRIPTION)) && intent.hasExtra(AddGoalActivity.GOAL_DEADLINE)) {
+            if (intent.hasExtra(EditGoalActivity.EDIT_GOAL) && intent.hasExtra(EditGoalActivity.GOAL_INDEX)) {
+                int goalIndex = intent.getIntExtra(EditGoalActivity.GOAL_INDEX, 0);
+
+                Goal goal = goals.get(goalIndex);
+                goal.setDeadline(intent.getStringExtra(EditGoalActivity.GOAL_DEADLINE));
+                goal.setDescription(intent.getStringExtra(EditGoalActivity.GOAL_DESCRIPTION));
+                goal.setTitle(intent.getStringExtra(EditGoalActivity.GOAL_TITLE));
+
+                System.out.println(goalIndex);
+
+                goals.set(goalIndex, goal);
+            } else {
+                goals.addLast(new Goal(intent.getStringExtra(AddGoalActivity.GOAL_TITLE), intent.getStringExtra(AddGoalActivity.GOAL_DESCRIPTION), intent.getStringExtra(AddGoalActivity.GOAL_DEADLINE)));
+                goalsAdapter.notifyDataSetChanged();
+                db = FirebaseFirestore.getInstance();
+                addDataFireStore();
+            }
+        }
+
+        for (Goal g : goals) {
+            System.out.println(g.getTitle());
+        }
+
         goalsAdapter = new GoalsAdapter(this, goals);
         goalList.setAdapter(goalsAdapter);
         goalList.setLayoutManager(new LinearLayoutManager(this));
-
-        Intent intent = getIntent();
-        if (intent.hasExtra(AddGoalActivity.GOAL_TITLE) && intent.hasExtra((AddGoalActivity.GOAL_DESCRIPTION)) && intent.hasExtra(AddGoalActivity.GOAL_DEADLINE)) {
-            goals.addLast(new Goal(intent.getStringExtra(AddGoalActivity.GOAL_TITLE), intent.getStringExtra(AddGoalActivity.GOAL_DESCRIPTION), intent.getStringExtra(AddGoalActivity.GOAL_DEADLINE)));
-            goalsAdapter.notifyDataSetChanged();
-            db = FirebaseFirestore.getInstance();
-            addDataFireStore();
-        }
 
         saveGoals();
     }
@@ -94,6 +112,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddGoal(View view) {
         Intent intent = new Intent(this, AddGoalActivity.class);
+        startActivity(intent);
+    }
+
+    public void onTapGoal(View view) {
+        Intent intent = new Intent(this, EditGoalActivity.class);
+        //intent.putExtra(EditGoalActivity.GOAL_INDEX, );
+        intent.putExtra(EditGoalActivity.GOAL_TITLE, ((TextView) view.findViewById(R.id.tvGoalTitle)).getText().toString());
+        intent.putExtra(EditGoalActivity.GOAL_DESCRIPTION, ((TextView) view.findViewById(R.id.tvGoalDescription)).getText().toString());
+        intent.putExtra(EditGoalActivity.GOAL_DEADLINE, ((TextView) view.findViewById(R.id.tvGoalDeadline)).getText().toString());
         startActivity(intent);
     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,39 +9,51 @@
         android:id="@+id/etGoalTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Goal title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="Goal title" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <EditText
         android:id="@+id/etGoalDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Goal description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etGoalTitle"
-        android:hint="Goal description" />
+        app:layout_constraintTop_toBottomOf="@+id/etGoalTitle" />
 
     <EditText
         android:id="@+id/etDeadline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Deadline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etGoalDescription"
-        android:hint="Deadline" />
+        app:layout_constraintTop_toBottomOf="@+id/etGoalDescription" />
 
     <Button
-        android:id="@+id/btnConfirm"
-        android:layout_width="match_parent"
+        android:id="@+id/btnRemove"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnConfirmEdit"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginHorizontal="5dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnConfirmEdit"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
         android:onClick="onDone"
         android:text="Confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnRemove" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

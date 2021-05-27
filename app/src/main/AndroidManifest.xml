@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddGoalActivity"></activity>
+        <activity android:name=".EditGoalActivity"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

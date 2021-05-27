@@ -1,6 +1,8 @@
 package com.example.rdapp;
 
-public class Goal {
+import java.io.Serializable;
+
+public class Goal implements Serializable {
     private String title, description, deadline, id;
 
     public Goal(String title, String description, String deadline) {

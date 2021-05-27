@@ -51,19 +51,25 @@ public class MainActivity extends AppCompatActivity {
 
         goalList = findViewById(R.id.rvGoals);
 
+        goalsAdapter = new GoalsAdapter(this, goals);
+        goalList.setAdapter(goalsAdapter);
+        goalList.setLayoutManager(new LinearLayoutManager(this));
+
         Intent intent = getIntent();
         if (intent.hasExtra(AddGoalActivity.GOAL_TITLE) && intent.hasExtra((AddGoalActivity.GOAL_DESCRIPTION)) && intent.hasExtra(AddGoalActivity.GOAL_DEADLINE)) {
-            if (intent.hasExtra(EditGoalActivity.EDIT_GOAL) && intent.hasExtra(EditGoalActivity.GOAL_INDEX)) {
+            if (intent.hasExtra(EditGoalActivity.EDIT_GOAL)) {
                 int goalIndex = intent.getIntExtra(EditGoalActivity.GOAL_INDEX, 0);
 
-                Goal goal = goals.get(goalIndex);
-                goal.setDeadline(intent.getStringExtra(EditGoalActivity.GOAL_DEADLINE));
-                goal.setDescription(intent.getStringExtra(EditGoalActivity.GOAL_DESCRIPTION));
-                goal.setTitle(intent.getStringExtra(EditGoalActivity.GOAL_TITLE));
+                Goal goal = (Goal)intent.getSerializableExtra(EditGoalActivity.GOAL);
 
-                System.out.println(goalIndex);
+                System.out.println("------------- ID AFTER EDIT: " + goal.getId());
 
-                goals.set(goalIndex, goal);
+                String newTitle = intent.getStringExtra(EditGoalActivity.GOAL_TITLE);
+                String newDescription = intent.getStringExtra(EditGoalActivity.GOAL_DESCRIPTION);
+                String newDeadline = intent.getStringExtra(EditGoalActivity.GOAL_DEADLINE);
+                db = FirebaseFirestore.getInstance();
+                updateGoals(goal, newTitle, newDescription, newDeadline);
+
             } else {
                 goals.addLast(new Goal(intent.getStringExtra(AddGoalActivity.GOAL_TITLE), intent.getStringExtra(AddGoalActivity.GOAL_DESCRIPTION), intent.getStringExtra(AddGoalActivity.GOAL_DEADLINE)));
                 goalsAdapter.notifyDataSetChanged();
@@ -112,10 +118,6 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(g.getTitle());
         }
 
-        goalsAdapter = new GoalsAdapter(this, goals);
-        goalList.setAdapter(goalsAdapter);
-        goalList.setLayoutManager(new LinearLayoutManager(this));
-
         //saveGoals();
     }
 
@@ -156,10 +158,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onTapGoal(View view) {
         Intent intent = new Intent(this, EditGoalActivity.class);
-        //intent.putExtra(EditGoalActivity.GOAL_INDEX, );
-        intent.putExtra(EditGoalActivity.GOAL_TITLE, ((TextView) view.findViewById(R.id.tvGoalTitle)).getText().toString());
-        intent.putExtra(EditGoalActivity.GOAL_DESCRIPTION, ((TextView) view.findViewById(R.id.tvGoalDescription)).getText().toString());
-        intent.putExtra(EditGoalActivity.GOAL_DEADLINE, ((TextView) view.findViewById(R.id.tvGoalDeadline)).getText().toString());
+        Goal goal = (Goal)((View)view.getParent()).getTag();
+        intent.putExtra(EditGoalActivity.GOAL, goal);
+
+        System.out.println("--------------- ID BEFORE EDIT: " + goal.getId());
+
         startActivity(intent);
     }
 
@@ -196,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         // after passing data to object class we are
         // sending it to firebase with specific document id.
         // below line is use to get the collection of our Firebase Firestore.
+        System.out.println("----------- USER ID IS: " + userId);
         db.collection("users").document(userId).collection("goals").
                 // below line is use toset the id of
                 // document where we have to perform

@@ -25,6 +25,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalsViewHol
     public GoalsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_goal, parent, false);
+        System.out.println(viewType);
         return new GoalsViewHolder(view);
     }
 
@@ -33,6 +34,8 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalsViewHol
         holder.tvGoalTitle.setText(goals.get(position).getTitle());
         holder.tvGoalDescription.setText(goals.get(position).getDescription());
         holder.tvGoalDeadline.setText(goals.get(position).getDeadline());
+
+        holder.itemView.setTag(goals.get(position));
     }
 
     @Override

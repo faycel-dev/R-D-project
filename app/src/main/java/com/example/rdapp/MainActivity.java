@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
                                 // that list to our object class.
                                 Goal c = d.toObject(Goal.class);
 
+                                c.setId(d.getId());
+
                                 // and we will pass this object class
                                 // inside our arraylist which we have
                                 // created for recycler view.
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                             // we are calling recycler view notifuDataSetChanged
                             // method to notify that data has been changed in recycler view.
                             goalsAdapter.notifyDataSetChanged();
+
                         } else {
                             // if the snapshot is empty we are displaying a toast message.
                             System.out.println("No data found in Database");
@@ -179,5 +182,46 @@ public class MainActivity extends AppCompatActivity {
                 }
             })*/
         }
+    }
+
+    private void updateGoals(Goal goal, String title, String description, String deadline) {
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        String userId = fAuth.getCurrentUser().getUid();
+
+        // inside this method we are passing our updated values
+        // inside our object class and later on we
+        // will pass our whole object to firebase Firestore.
+        Goal updatedGoal = new Goal(title, description, deadline);
+
+        // after passing data to object class we are
+        // sending it to firebase with specific document id.
+        // below line is use to get the collection of our Firebase Firestore.
+        db.collection("users").document(userId).collection("goals").
+                // below line is use toset the id of
+                // document where we have to perform
+                // update operation.
+                        document(goal.getId()).
+
+                // after setting our document id we are
+                // passing our whole object class to it.
+                        set(updatedGoal).
+
+                // after passing our object class we are
+                // calling a method for on success listener.
+                        addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // on successful completion of this process
+                        // we are displaying the toast message.
+                        System.out.println("Course has been updated..");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            // inside on failure method we are
+            // displaying a failure message.
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("Fail to update the data..");
+            }
+        });
     }
 }

@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         String userId = fAuth.getCurrentUser().getUid();
         DocumentReference dbDocument = db.document("users/" + userId);
-        System.out.println(dbDocument.getPath());
         if(goals.size() >0) {
             dbDocument.collection("goals").add(goals.getLast());
             goals.removeLast();/*.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -227,5 +226,12 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Fail to update the data..");
             }
         });
+    }
+
+    private void deleteGoal(Goal goal){
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        String userId = fAuth.getCurrentUser().getUid();
+        db.collection("users").document(userId).collection("goals").
+        document(goal.getId());
     }
 }

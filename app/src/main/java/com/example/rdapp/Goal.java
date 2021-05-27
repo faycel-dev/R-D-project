@@ -8,6 +8,9 @@ public class Goal {
         this.description = description;
         this.deadline = deadline;
     }
+    public Goal(){
+
+    }
 
     public String getTitle() {
         return title;

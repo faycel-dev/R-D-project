@@ -15,6 +15,8 @@ import android.view.View;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -27,13 +29,14 @@ import java.util.HashMap;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView goalList;
     GoalsAdapter goalsAdapter;
 
-    LinkedList<Goal> goals;
+    LinkedList<Goal> goals = new LinkedList<>();
 
     private FirebaseFirestore db;
 
@@ -42,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!retrieveGoals()) {
-            goals = new LinkedList<>();
-        }
+        //if (!retrieveGoals()) {
+          //  goals = new LinkedList<>();
+        //}
 
         goalList = findViewById(R.id.rvGoals);
 
@@ -68,7 +71,40 @@ public class MainActivity extends AppCompatActivity {
                 addDataFireStore();
             }
         }
+        db = FirebaseFirestore.getInstance();
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        db.collection("users").document(fAuth.getCurrentUser().getUid()).collection("goals")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // after getting the data we are calling on success method
+                        // and inside this method we are checking if the received
+                        // query snapshot is empty or not.
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            // if the snapshot is not empty we are
+                            // hiding our progress bar and adding
+                            // our data in a list.
+                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            for (DocumentSnapshot d : list) {
+                                // after getting this list we are passing
+                                // that list to our object class.
+                                Goal c = d.toObject(Goal.class);
 
+                                // and we will pass this object class
+                                // inside our arraylist which we have
+                                // created for recycler view.
+                                goals.add(c);
+                            }
+                            // after adding the data to recycler view.
+                            // we are calling recycler view notifuDataSetChanged
+                            // method to notify that data has been changed in recycler view.
+                            goalsAdapter.notifyDataSetChanged();
+                        } else {
+                            // if the snapshot is empty we are displaying a toast message.
+                            System.out.println("No data found in Database");
+                        }
+                    }
+                });
         for (Goal g : goals) {
             System.out.println(g.getTitle());
         }
@@ -77,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         goalList.setAdapter(goalsAdapter);
         goalList.setLayoutManager(new LinearLayoutManager(this));
 
-        saveGoals();
+        //saveGoals();
     }
 
     private boolean retrieveGoals() {
@@ -128,11 +164,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         String userId = fAuth.getCurrentUser().getUid();
         DocumentReference dbDocument = db.document("users/" + userId);
-        HashMap<String, Object> Goals = new HashMap<>();
+        System.out.println(dbDocument.getPath());
         if(goals.size() >0) {
-            Goals.put(String.valueOf(goals.size()-1), goals.getLast());
-            System.out.println(dbDocument.getId());
-            dbDocument.set(Goals, SetOptions.merge())/*.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            dbDocument.collection("goals").add(goals.getLast());
+            goals.removeLast();/*.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     Toast.makeText(MainActivity.this, "Your goals have been added to Firebase Firestore", Toast.LENGTH_SHORT).show();
@@ -142,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(MainActivity.this, "Fail to add goals \n" + e, Toast.LENGTH_SHORT).show();
                 }
-            })*/;
+            })*/
         }
     }
 }

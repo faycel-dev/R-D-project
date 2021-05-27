@@ -1,7 +1,7 @@
 package com.example.rdapp;
 
 public class Goal {
-    private String title, description, deadline;
+    private String title, description, deadline, id;
 
     public Goal(String title, String description, String deadline) {
         this.title = title;
@@ -24,9 +24,13 @@ public class Goal {
         return deadline;
     }
 
+    public String getId(){ return id; }
+
     public void setTitle(String title) { this.title = title; }
 
     public void setDescription(String description) { this.description = description; }
 
     public void setDeadline(String deadline) { this.deadline = deadline; }
+
+    public void setId(String id) {this.id = id; }
 }

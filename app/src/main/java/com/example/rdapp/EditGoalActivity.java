@@ -7,6 +7,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.model.mutation.ArrayTransformOperation;
+
 public class EditGoalActivity extends AppCompatActivity {
     public static final String GOAL_TITLE = "com.example.rnd.GOAL_TITLE";
     public static final String GOAL_DESCRIPTION = "com.example.rnd.GOAL_DESCRIPTION";
@@ -14,6 +16,7 @@ public class EditGoalActivity extends AppCompatActivity {
     public static final String GOAL = "com.example.rnd.GOAL";
     public static final String EDIT_GOAL = "com.example.rnd.EDIT";
     public static final String GOAL_INDEX = "com.example.rnd.GOAL_INDEX";
+    public static final String REMOVE_GOAL = "com.example.rnd.REMOVEGOAL";
 
     int goalIndex;
     EditText title, description, deadline;
@@ -49,6 +52,13 @@ public class EditGoalActivity extends AppCompatActivity {
         intent.putExtra(GOAL_TITLE, title.getText().toString());
         intent.putExtra(GOAL_DESCRIPTION, description.getText().toString());
         intent.putExtra(GOAL_DEADLINE, deadline.getText().toString());
+        startActivity(intent);
+    }
+
+    public void onRemove(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(REMOVE_GOAL, "");
+        intent.putExtra(GOAL, goal);
         startActivity(intent);
     }
 }

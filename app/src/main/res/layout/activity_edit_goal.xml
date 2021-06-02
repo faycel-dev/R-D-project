@@ -37,11 +37,12 @@
         android:id="@+id/btnRemove"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:onClick="onRemove"
         android:text="Remove"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnConfirmEdit"
         app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginHorizontal="5dp"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button

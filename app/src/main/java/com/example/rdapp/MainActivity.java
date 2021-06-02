@@ -77,6 +77,14 @@ public class MainActivity extends AppCompatActivity {
                 addDataFireStore();
             }
         }
+
+        if (intent.hasExtra(EditGoalActivity.REMOVE_GOAL)) {
+            Goal goal = (Goal) intent.getSerializableExtra(EditGoalActivity.GOAL);
+
+            db = FirebaseFirestore.getInstance();
+            deleteGoal(goal);
+        }
+
         db = FirebaseFirestore.getInstance();
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         db.collection("users").document(fAuth.getCurrentUser().getUid()).collection("goals")
@@ -232,6 +240,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         String userId = fAuth.getCurrentUser().getUid();
         db.collection("users").document(userId).collection("goals").
-        document(goal.getId());
+        document(goal.getId()).delete();
     }
 }

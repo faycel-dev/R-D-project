@@ -90,7 +90,7 @@ public class Login extends AppCompatActivity {
                 passwordResetDialog.setTitle("Reset Password ?");
                 passwordResetDialog.setMessage("Enter Your Email");
                 passwordResetDialog.setView(resetMail);
-                passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                passwordResetDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //get the email and send reset link
@@ -103,12 +103,12 @@ public class Login extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                         Toast.makeText(Login.this,"Error somethingwent wrong " +e.getMessage(),Toast.LENGTH_SHORT).show();
+                                         Toast.makeText(Login.this,"Error something went wrong " +e.getMessage(),Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                 });
-                passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                passwordResetDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //close the dialog
